@@ -1,103 +1,88 @@
+"use client";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  return (
+    <>
+   
+    <section className="relative min-h-[100vh] flex items-center justify-center bg-white px-6 md:px-16">
+      <div className="grid md:grid-cols-2 gap-12 items-center max-w-7xl w-full">
+        
+        {/* Left Side - Map */}
+        <div className="flex justify-center">
+          <div className="bg-white/20 backdrop-blur-md shadow-2xl rounded-2xl p-6">
+            <img
+              className="h-[65vh] w-auto object-contain drop-shadow-xl"
+              src="/jharkhand.png"
+              alt="Jharkhand Map"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* Right Side - Text */}
+        <div className="flex flex-col gap-6 text-center md:text-left">
+          <h1 className="text-black font-extrabold text-4xl md:text-6xl leading-tight drop-shadow-lg">
+            Report Civic Issues, <br /> Make Your City Better
+          </h1>
+          <p className="text-black/70 text-xl text-semibold md:text-xl max-w-lg">
+            Empowering citizens of Jharkhand to report and resolve civic problems faster. 
+            Together, we can create cleaner and safer cities.
+          </p>
+          
+          {/* Call to Action */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+            {/* <button className="px-6 py-3 bg-white text-red-500 font-semibold rounded-xl shadow-lg hover:bg-red-100 transition">
+              Report an Issue
+            </button> */}
+            <button  onClick={() => router.push("/dashboard")}
+            className="px-6 py-3 bg-transparent border border-black text-black/65 font-semibold rounded-xl hover:bg-white/20 transition">
+              View Reported Issues
+            </button>
+             
+          </div>
+        </div>
+      </div>
+    </section>
+          <section className="min-h-[90vh] grid grid-cols-2 mx-auto bg-white">
+        {/* <div className="flex justify-center flex-col ml-[5vw] gap-2 mt-20 text-white h-[84vh] px-5 md:px-0 text-xs md:text-base"> */}
+        <div className="flex items-center justify-center flex-col  mt-20 mr-[10vw]">
+          <span>
+            <img className="ml-8 invertImg h-[75vh] w-[24vw]" src="/phones.png" alt="" />
+          </span>
+        </div>
+        <div className="flex justify-center flex-col ml-[2vw] gap-2 mt-10">
+          <p className="text-blue-800 font-bold text-5xl mr-10">Join The Revolution </p>
+       
+          <p className="text-gray-700 text-2xl">Empowering citizens of Jharkhand to report and resolve civic problems faster. 
+            Together, we can create cleaner and safer cities.</p>
+          <div className="input flex gap-4 ">
+            <Link href="/">
+              <div className="flex space-x-4">
+                <a href="https://www.apple.com/in/app-store/" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                    alt="Download on the App Store"
+                    className="h-12"
+                  />
+                </a>
+                <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                    alt="Get it on Google Play"
+                    className="h-12"
+                  />
+                </a>
+              </div>
+
+
+            </Link>
+          </div>
+        </div>
+        {/* </div> */}
+      </section>
+       </>
   );
 }
