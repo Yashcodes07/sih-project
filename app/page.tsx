@@ -1,88 +1,86 @@
 "use client";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
 export default function Home() {
   const router = useRouter();
 
   return (
     <>
-   
-    <section className="relative min-h-[100vh] flex items-center justify-center bg-white px-6 md:px-16">
-      <div className="grid md:grid-cols-2 gap-12 items-center max-w-7xl w-full">
-        
-        {/* Left Side - Map */}
-        <div className="flex justify-center">
-          <div className="bg-white/20 backdrop-blur-md shadow-2xl rounded-2xl p-6">
-            <img
-              className="h-[65vh] w-auto object-contain drop-shadow-xl"
-              src="/jharkhand.png"
-              alt="Jharkhand Map"
-            />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        {/* Hero Section */}
+        <div className="container mx-auto px-4 py-16">
+          <div className="text-center max-w-4xl mx-auto">
+            {/* Centered Content */}
+            <div className="space-y-6">
+              <h1 className="text-6xl font-bold text-gray-800 leading-tight">
+                Report Civic Issues,
+                <span className="text-blue-600 block">Make Jharkhand Better</span>
+              </h1>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Empowering citizens of Jharkhand to report and resolve civic problems faster.
+                Together, we can create cleaner and safer cities.
+              </p>
+
+              {/* Call to Action */}
+              <div className="space-y-4 pt-8">
+                <button
+                  onClick={() => router.push("/map")}
+                  className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-lg mr-4"
+                >
+                  View Live Dashboard
+                </button>
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="px-8 py-4 bg-transparent border-2 border-blue-600 text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-colors"
+                >
+                  View Reports Summary
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Side - Text */}
-        <div className="flex flex-col gap-6 text-center md:text-left">
-          <h1 className="text-black font-extrabold text-4xl md:text-6xl leading-tight drop-shadow-lg">
-            Report Civic Issues, <br /> Make Your City Better
-          </h1>
-          <p className="text-black/70 text-xl text-semibold md:text-xl max-w-lg">
-            Empowering citizens of Jharkhand to report and resolve civic problems faster. 
-            Together, we can create cleaner and safer cities.
-          </p>
-          
-          {/* Call to Action */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-4">
-            {/* <button className="px-6 py-3 bg-white text-red-500 font-semibold rounded-xl shadow-lg hover:bg-red-100 transition">
-              Report an Issue
-            </button> */}
-            <button  onClick={() => router.push("/dashboard")}
-            className="px-6 py-3 bg-transparent border border-black text-black/65 font-semibold rounded-xl hover:bg-white/20 transition">
-              View Reported Issues
-            </button>
-             
+        {/* Features Section */}
+        <div className="container mx-auto px-4 py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Join The Digital Governance Revolution
+            </h2>
+            <p className="text-lg text-gray-600">
+              Empowering citizens of Jharkhand to report and resolve civic problems faster.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📱</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Easy Reporting</h3>
+              <p className="text-gray-600">Report issues with just a few taps using our mobile app</p>
+            </div>
+            
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">⚡</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Real-time Tracking</h3>
+              <p className="text-gray-600">Track the progress of your reports in real-time</p>
+            </div>
+            
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🏛️</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Government Connect</h3>
+              <p className="text-gray-600">Direct connection with municipal authorities</p>
+            </div>
           </div>
         </div>
       </div>
-    </section>
-          <section className="min-h-[90vh] grid grid-cols-2 mx-auto bg-white">
-        {/* <div className="flex justify-center flex-col ml-[5vw] gap-2 mt-20 text-white h-[84vh] px-5 md:px-0 text-xs md:text-base"> */}
-        <div className="flex items-center justify-center flex-col  mt-20 mr-[10vw]">
-          <span>
-            <img className="ml-8 invertImg h-[75vh] w-[24vw]" src="/phones.png" alt="" />
-          </span>
-        </div>
-        <div className="flex justify-center flex-col ml-[2vw] gap-2 mt-10">
-          <p className="text-blue-800 font-bold text-5xl mr-10">Join The Revolution </p>
-       
-          <p className="text-gray-700 text-2xl">Empowering citizens of Jharkhand to report and resolve civic problems faster. 
-            Together, we can create cleaner and safer cities.</p>
-          <div className="input flex gap-4 ">
-            <Link href="/">
-              <div className="flex space-x-4">
-                <a href="https://www.apple.com/in/app-store/" target="_blank" rel="noopener noreferrer">
-                  <img
-                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                    alt="Download on the App Store"
-                    className="h-12"
-                  />
-                </a>
-                <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                    alt="Get it on Google Play"
-                    className="h-12"
-                  />
-                </a>
-              </div>
-
-
-            </Link>
-          </div>
-        </div>
-        {/* </div> */}
-      </section>
-       </>
+    </>
   );
 }

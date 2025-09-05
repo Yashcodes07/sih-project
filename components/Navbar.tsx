@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 interface NavbarProps {
   userName?: string;
@@ -13,23 +14,12 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ userProfilePic }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const router = useRouter();
-
-  // ✅ Check token on page load
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user"); // you can save user info on login
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
+  const { data: session } = useSession();
+  const user = session?.user; // NextAuth user
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push("/login");
+    signOut({ callbackUrl: "/login" });
   };
 
   return (
@@ -39,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ userProfilePic }) => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Link href="/" className="text-2xl font-bold text-blue-600">
-              Civic/Hub
+              CrowdSync
             </Link>
           </div>
 
@@ -63,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({ userProfilePic }) => {
             {!user ? (
               // ✅ If NOT logged in
               <button
-                onClick={() => router.push("/login")}
+                onClick={() => signIn()} // NextAuth signIn
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
               >
                 Login
@@ -75,9 +65,9 @@ const Navbar: React.FC<NavbarProps> = ({ userProfilePic }) => {
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2 focus:outline-none"
                 >
-                  {userProfilePic ? (
+                  {user.image || userProfilePic ? (
                     <img
-                      src={userProfilePic}
+                      src={(user.image as string) || (userProfilePic as string)}
                       alt="Profile"
                       className="w-8 h-8 rounded-full"
                     />

@@ -14,25 +14,25 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-
         await connectToDatabase();
-        const user = await User.findOne({ email: credentials.email });
-        if (!user) return null;
+
+        const user = await User.findOne({ email: credentials.email.trim().toLowerCase() });
+        if (!user) return null; // Not an allowed officer!
+        if (!user.password) return null; // Account not set up yet; prompt to register
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) return null;
 
-        return { id: user._id.toString(), 
-                 name: user.name,
-                 email: user.email,
-                 department: user.department,
-                 };
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          department: user.department,
+        };
       },
     }),
   ],
   
-  
-
   pages: { signIn: "/login", error: "/login" },
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
