@@ -65,71 +65,71 @@ function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="bg-white/10 backdrop-blur-lg shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-700">
-        <h1 className="text-3xl font-bold text-center text-white mb-6">Register</h1>
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="bg-white/10 backdrop-blur-lg shadow-xl rounded-2xl p-8 w-full max-w-md border h-[110vh] mt-12 mb-5 border-gray-700">
+        <h1 className="text-3xl font-bold text-center text-black/90 mb-6">Register</h1>
 
         {error && <div className="mb-4 p-2 text-sm text-red-400 bg-red-900/40 rounded">{error}</div>}
         {success && <div className="mb-4 p-2 text-sm text-green-400 bg-green-900/40 rounded">{success}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-300 mb-2">Name</label>
+            <label className="block text-black/90 mb-2">Name</label>
             <input
               type="text"
               placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-2 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2">Email</label>
+            <label className="block text-black/90 mb-2">Email</label>
             <input
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2">Department</label>
+            <label className="block text-black/90 mb-2">Department</label>
             <input
               type="text"
               placeholder="Enter your department"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
               required
-              className="w-full px-4 py-2 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2">Password</label>
+            <label className="block text-black/90 mb-2">Password</label>
             <input
               type="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2">Confirm Password</label>
+            <label className="block text-black/90 mb-2">Confirm Password</label>
             <input
               type="password"
               placeholder="Confirm your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100 text-black border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -144,11 +144,11 @@ function RegisterPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-gray-400">
+        <div className="mt-6 text-center text-gray-900">
           Already have an account?{" "}
           <button
             onClick={() => router.push("/login")}
-            className="text-blue-400 hover:text-blue-500 font-semibold"
+            className="text-blue-700 hover:text-blue-500 font-semibold"
           >
             Login
           </button>
