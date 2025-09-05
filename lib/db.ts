@@ -10,24 +10,27 @@ declare global {
   var mongooseCache: MongooseGlobal | undefined;
 }
 
-let cached = global.mongooseCache;
+let cached: MongooseGlobal;
 
-if (!cached) {
-  cached = global.mongooseCache = { conn: null, promise: null };
+if (!global.mongooseCache) {
+  global.mongooseCache = { conn: null, promise: null };
 }
+cached = global.mongooseCache;
 
 export default async function connectToDatabase() {
-  if (cached!.conn) return cached!.conn;
+  if (cached.conn) return cached.conn;
 
-  if (!cached!.promise) {
+  if (!cached.promise) {
     const uri = process.env.MONGODB_URI;
     if (!uri) throw new Error("MONGODB_URI not set in .env");
 
-    cached!.promise = mongoose.connect(uri, {
-      dbName: "Sih_project",
-    });
-  }
+    const dbName = process.env.MONGODB_DBNAME || "SIH_Project";
 
-  cached!.conn = await cached!.promise;
-  return cached!.conn;
+    cached.promise = mongoose.connect(uri, { dbName });
+  }
+  // Multiple concurrent calls to connectToDatabase will await the same promise,
+  // ensuring only one connection attempt is made.
+  cached.conn = await cached.promise;
+  console.log("Connected DB Name:", mongoose.connection.name);
+  return cached.conn;
 }

@@ -6,8 +6,8 @@ import SessionWrapper from "@/components/Sessionwrapper";
 import { ReactNode } from "react";
 
 export const metadata = {
-  title: "Civic-Hub",
-  description: "Crowdsourced Civic Issue Reporting",
+  title: "CrowdSync - Jharkhand",
+  description: "Real-time Civic Issue Reporting and Management System",
 };
 
 interface RootLayoutProps {
@@ -17,10 +17,10 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className="bg-white min-h-screen">
+      <body>
         <SessionWrapper>
           <Navbar />
-          <main className="min-h-screen px-6 py-4">{children}</main>
+          <main>{children}</main>
         </SessionWrapper>
       </body>
     </html>
