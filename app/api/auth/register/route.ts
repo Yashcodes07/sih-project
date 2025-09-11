@@ -2,32 +2,65 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import connectToDatabase from "@/lib/db";
 import User from "@/models/User";
+import Officer from "@/models/Officer";
 
 export async function POST(req: NextRequest) {
   try {
     const { name, email, department, password } = await req.json();
-    if (!name || !email || !department || !password) {
-      return NextResponse.json({ error: "All fields required" }, { status: 400 });
-    }
-    await connectToDatabase();
-    const allUsers = await User.find({});
-    console.log('ALL USER EMAILS:', allUsers.map(u => u.email));
-    console.log('LOOKUP EMAIL:', email.trim().toLowerCase());
-    const user = await User.findOne({ email: email.trim().toLowerCase() });
-    console.log("Queried for:", email, "Result:", user);
 
-    if (!user) {
-      return NextResponse.json({ error: "This email is not authorized to register" }, { status: 403 });
+    if (!name || !email || !password) {
+      return NextResponse.json({ error: "Name, email and password are required" }, { status: 400 });
     }
-    if (user.password) {
-      return NextResponse.json({ error: "Already registered, please log in" }, { status: 400 });
+
+    await connectToDatabase();
+
+    // Check if email exists in officers collection
+    const existingOfficer = await Officer.findOne({ email: email.trim().toLowerCase() });
+    
+    if (existingOfficer) {
+      // This is an officer registration
+      if (!department) {
+        return NextResponse.json({ error: "Department is required for officers" }, { status: 400 });
+      }
+
+      if (existingOfficer.password) {
+        return NextResponse.json({ error: "Already registered, please log in" }, { status: 400 });
+      }
+
+      // Update pre-existing officer record
+      existingOfficer.name = name;
+      existingOfficer.department = department;
+      existingOfficer.password = await bcrypt.hash(password, 10);
+      await existingOfficer.save();
+
+      return NextResponse.json({ 
+        message: "Successfully registered as an officer!", 
+        role: "officer" 
+      });
     }
-    // Update pre-existing blank user
-    user.name = name;
-    user.department = department;
-    user.password = await bcrypt.hash(password, 10);
-    await user.save();
-    return NextResponse.json({ message: "Registration successful! Please login." });
+
+    // Check if already registered as citizen
+    const existingUser = await User.findOne({ email: email.trim().toLowerCase() });
+    if (existingUser) {
+      return NextResponse.json({ error: "Email already registered" }, { status: 400 });
+    }
+
+    // Register as citizen
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      name,
+      email: email.trim().toLowerCase(),
+      password: hashedPassword,
+      role: 'citizen'
+    });
+
+    await newUser.save();
+
+    return NextResponse.json({ 
+      message: "Successfully registered as a citizen!", 
+      role: "citizen" 
+    });
+
   } catch (err: any) {
     console.error("REGISTER ERROR:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

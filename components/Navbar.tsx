@@ -3,145 +3,99 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaBars } from "react-icons/fa";
 import { useSession, signIn, signOut } from "next-auth/react";
+import HamburgerMenu from "./HamburgerMenu";
 
 interface NavbarProps {
-  userName?: string;
   userProfilePic?: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ userProfilePic }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
-  const user = session?.user; // NextAuth user
+  const user = session?.user;
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/login" });
   };
 
   return (
-    <nav className="bg-blue-600 shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Link href="/" className="text-2xl font-bold text-white">
-              Crowd/Sync
-            </Link>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link href="/" className="text-white hover:text-gray-700">
-              Home
-            </Link>
-            <Link href="/map" className="text-white hover:text-gray-700">
-              Map View
-            </Link>
-            {user && (
-              <Link href="/dashboard" className="text-gray-700 hover:text-white">
-                My Reports
-              </Link>
-            )}
-          </div>
-
-          {/* Right Section */}
+    <>
+      <nav className="bg-white shadow-lg px-4 py-3 relative z-30">
+        <div className="flex items-center justify-between">
+          {/* Left Section - Hamburger + Logo */}
           <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setIsHamburgerOpen(true)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <FaBars size={20} className="text-gray-700" />
+            </button>
+            
+            <Link href="/" className="text-4xl font-bold text-blue-600">
+              CrowdSync
+            </Link>
+          </div>
+
+          {/* Right Section - User Profile */}
+          <div className="relative">
             {!user ? (
-              // ✅ If NOT logged in
               <button
-                onClick={() => signIn()} // NextAuth signIn
-                className="bg-transparent text-white px-4 py-2 rounded-lg border-2 hover:bg-blue-800"
+                onClick={() => signIn()}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Login
               </button>
             ) : (
-              // ✅ If logged in
-              <div className="relative">
+              <div>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center space-x-2 focus:outline-none"
+                  className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   {user.image || userProfilePic ? (
                     <img
-                      src={(user.image as string) || (userProfilePic as string)}
+                      src={user.image || userProfilePic}
                       alt="Profile"
                       className="w-8 h-8 rounded-full"
                     />
                   ) : (
-                    <FaUserCircle className="w-8 h-8 text-gray-600" />
+                    <FaUserCircle size={32} className="text-gray-400" />
                   )}
-                  <span className="hidden md:block text-gray-700">
-                    {user.name}
-                  </span>
+                  <span className="font-medium text-gray-700">{user.name}</span>
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md">
-                    <ul className="py-1">
-                      <li>
-                        <Link
-                          href="/dashboard"
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                          My Reports
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/settings"
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                          Settings
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
+                    <Link
+                      href="/reports"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      My Reports
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-b-lg"
+                    >
+                      Logout
+                    </button>
                   </div>
                 )}
               </div>
             )}
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 focus:outline-none"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <div className="w-6 h-0.5 bg-gray-600 mb-1"></div>
-              <div className="w-6 h-0.5 bg-gray-600 mb-1"></div>
-              <div className="w-6 h-0.5 bg-gray-600"></div>
-            </button>
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-md px-4 py-2 space-y-2">
-          <Link href="/" className="block text-gray-700 hover:text-blue-600">
-            Home
-          </Link>
-          <Link href="/map" className="block text-gray-700 hover:text-blue-600">
-            Map View
-          </Link>
-          {user && (
-            <Link href="/dashboard" className="block text-gray-700 hover:text-blue-600">
-              My Reports
-            </Link>
-          )}
-        </div>
-      )}
-    </nav>
+      {/* Hamburger Menu */}
+      <HamburgerMenu 
+        isOpen={isHamburgerOpen} 
+        onClose={() => setIsHamburgerOpen(false)} 
+      />
+    </>
   );
 };
 

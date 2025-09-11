@@ -1,24 +1,240 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Custom leaflet popup styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 0;
+  border: 1px solid #e5e7eb;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+  max-width: 320px !important;
+  width: 320px !important;
+}
+
+.leaflet-popup-tip {
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+.leaflet-popup-close-button {
+  color: #6b7280 !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  padding: 8px !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-close-button:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+}
+
+/* Custom marker icon fix */
+.leaflet-default-icon-path {
+  background-image: url('https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png');
+}
+
+/* Smooth transitions for all interactive elements */
+button, select, input {
+  transition: all 0.2s ease-in-out;
+}
+
+select:hover {
+  border-color: #3b82f6;
+}
+
+/* Custom scrollbar for feeds */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #94a3b8, #64748b);
+}
+
+/* Enhanced button hover effects */
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* FIXED: Enhanced Pie Chart Hover Animations */
+.pie-chart-enhanced .recharts-pie-sector {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+/* Individual sector hover effects based on position */
+.pie-chart-enhanced .recharts-pie-sector:hover {
+  filter: brightness(1.1) saturate(1.2);
+  transform: scale(1.05);
+  transform-origin: var(--sector-center-x, 50%) var(--sector-center-y, 50%);
+}
+
+/* Pie chart sector hover animation - Fixed directional scaling */
+.pie-cell-hover {
+  /* Define the properties to be transitioned */
+  transition: transform 0.3s ease, filter 0.3s ease;
+  /* Set the origin for the scale transform to the center of the segment */
+  transform-origin: center;
+  cursor: pointer;
+}
+
+.pie-cell-hover:hover {
+  /* Apply a slight scale-up and brightness increase on hover */
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Enhanced pie chart container */
+.pie-chart-enhanced {
+  overflow: visible;
+}
+
+/* Custom pie chart responsive behavior */
+.pie-chart-enhanced .recharts-responsive-container {
+  overflow: visible;
+}
+
+/* Pie chart legend enhancements */
+.pie-legend-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.pie-legend-item:hover {
+  transform: translateX(4px);
+  background-color: rgba(59, 130, 246, 0.05);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin: -4px -8px;
+}
+
+/* Enhanced backdrop blur support */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Improved hamburger menu animations */
+.hamburger-menu {
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hamburger-menu.open {
+  transform: translateX(0);
+}
+
+.hamburger-overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.hamburger-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Enhanced map container z-index management */
+.leaflet-container {
+  z-index: 1;
+}
+
+.leaflet-popup-pane {
+  z-index: 1000;
+}
+
+/* Custom loading states */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Improved mobile responsiveness */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    width: 280px;
+  }
+  
+  .leaflet-popup-content {
+    max-width: 260px !important;
+    width: 260px !important;
+  }
+}
+
+/* Enhanced card hover effects */
+.card-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth page transitions */
+.page-transition {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Enhanced gradient animations */
+.gradient-animation {
+  background: linear-gradient(-45deg, #3b82f6, #1d4ed8, #2563eb, #1e40af);
+  background-size: 400% 400%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
