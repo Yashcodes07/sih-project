@@ -148,7 +148,7 @@ export const mockReports: CivicReport[] = [
     "location": { "lat": 23.7800, "lng": 86.4100 },
     "imageUrl": "/pipeline.jpg",
     "timestamp": Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
-    "status": "In-Progress",
+    "status": "Marked",
     "district": "Dhanbad"
   },
   {

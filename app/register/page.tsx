@@ -10,7 +10,6 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOfficerEmail, setIsOfficerEmail] = useState(false);
   const [emailChecked, setEmailChecked] = useState(false);
@@ -45,7 +44,6 @@ function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       setError("Name, email and password are required");
@@ -81,14 +79,27 @@ function RegisterPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        // 🔧 Improve: Redirect to login for both officer and citizen already-registered cases
+        const alreadyRegistered =
+          data.error === "Already registered, please log in" ||
+          data.error === "Email already registered";
+
+        if (alreadyRegistered) {
+          setError("This email is already registered. Please log in instead.");
+          setTimeout(() => {
+            router.push("/login");
+          }, 2000);
+          return;
+        }
+
         setError(data.error || "Registration failed");
         return;
       }
 
-      setSuccess(data.message || "Registered successfully!");
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
+      // 🔧 FIXED: Registration successful - redirect to OTP verification
+      if (data.requiresOTP) {
+        router.push(`/verify-otp?email=${encodeURIComponent(email.trim())}&type=register&role=${data.role}`);
+      }
 
     } catch (err) {
       console.error(err);
@@ -104,7 +115,6 @@ function RegisterPage() {
         <h2 className="text-3xl font-bold text-white text-center mb-6">Register</h2>
         
         {error && <div className="bg-red-500/20 text-red-300 p-3 rounded-lg mb-4">{error}</div>}
-        {success && <div className="bg-green-500/20 text-green-300 p-3 rounded-lg mb-4">{success}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

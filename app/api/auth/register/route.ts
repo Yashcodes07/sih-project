@@ -23,19 +23,35 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Department is required for officers" }, { status: 400 });
       }
 
+      // 🔧 FIXED: Check if already has password (already registered)
       if (existingOfficer.password) {
         return NextResponse.json({ error: "Already registered, please log in" }, { status: 400 });
       }
+
+      // Generate OTP for new officer registration
+      const otp = process.env.DEMO_OTP || Math.floor(100000 + Math.random() * 900000).toString();
+      const otpHash = await bcrypt.hash(otp, 10);
+      const otpExpires = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes
 
       // Update pre-existing officer record
       existingOfficer.name = name;
       existingOfficer.department = department;
       existingOfficer.password = await bcrypt.hash(password, 10);
+      existingOfficer.otp_hash = otpHash;
+      existingOfficer.otp_expires = otpExpires;
+      existingOfficer.otp_attempts = 0;
+      existingOfficer.is_verified = false; // Will be set to true after OTP verification
       await existingOfficer.save();
 
+      // In production, send email with OTP here
+      if (!process.env.DEMO_OTP) {
+        console.log(`OTP for ${email}: ${otp}`);
+      }
+
       return NextResponse.json({ 
-        message: "Successfully registered as an officer!", 
-        role: "officer" 
+        message: "Registration successful! Please verify OTP.", 
+        role: "officer",
+        requiresOTP: true
       });
     }
 
@@ -46,19 +62,33 @@ export async function POST(req: NextRequest) {
     }
 
     // Register as citizen
+    const otp = process.env.DEMO_OTP || Math.floor(100000 + Math.random() * 900000).toString();
+    const otpHash = await bcrypt.hash(otp, 10);
+    const otpExpires = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       name,
       email: email.trim().toLowerCase(),
       password: hashedPassword,
-      role: 'citizen'
+      role: 'citizen',
+      otp_hash: otpHash,
+      otp_expires: otpExpires,
+      otp_attempts: 0,
+      is_verified: false // Will be set to true after OTP verification
     });
 
     await newUser.save();
 
+    // In production, send email with OTP here
+    if (!process.env.DEMO_OTP) {
+      console.log(`OTP for ${email}: ${otp}`);
+    }
+
     return NextResponse.json({ 
-      message: "Successfully registered as a citizen!", 
-      role: "citizen" 
+      message: "Registration successful! Please verify OTP.", 
+      role: "citizen",
+      requiresOTP: true
     });
 
   } catch (err: any) {

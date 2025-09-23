@@ -72,6 +72,14 @@ export default function Reports() {
         totalUsers: 50
       };
     }
+
+    if (reportId === '12') {
+      return {
+        upvotes: 18, // 18/50 = 36% - just below 70% threshold
+        downvotes: 7,
+        totalUsers: 50
+      };
+    }
     
     return { upvotes, downvotes, totalUsers: 50 };
   };

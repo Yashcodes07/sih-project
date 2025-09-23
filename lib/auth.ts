@@ -20,12 +20,50 @@ export const authOptions: NextAuthOptions = {
 
         await connectToDatabase();
 
+        // 🆕 Special case for verified users coming from OTP flow
+        if (credentials.password === "verified") {
+          // Check officers collection first
+          const officer = await Officer.findOne({ 
+            email: credentials.email.trim().toLowerCase(),
+            is_verified: true  // 🆕 Only allow verified users
+          });
+
+          if (officer) {
+            return {
+              id: officer._id.toString(),
+              email: officer.email,
+              name: officer.name,
+              role: "officer",
+              department: officer.department
+            };
+          }
+
+          // Check users collection
+          const user = await User.findOne({ 
+            email: credentials.email.trim().toLowerCase(),
+            is_verified: true  // 🆕 Only allow verified users
+          });
+
+          if (user) {
+            return {
+              id: user._id.toString(),
+              email: user.email,
+              name: user.name,
+              role: user.role || "citizen",
+              department: user.department || null
+            };
+          }
+
+          return null;
+        }
+
+        // 🔄 Your existing password authentication logic
         // Check officers collection first
-        const officer = await Officer.findOne({ 
-          email: credentials.email.trim().toLowerCase() 
+        const officer = await Officer.findOne({
+          email: credentials.email.trim().toLowerCase()
         });
 
-        if (officer && officer.password) {
+        if (officer && officer.password && officer.is_verified) {  // 🆕 Added is_verified check
           const isValid = await bcrypt.compare(credentials.password, officer.password);
           if (isValid) {
             return {
@@ -39,11 +77,11 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Check users collection
-        const user = await User.findOne({ 
-          email: credentials.email.trim().toLowerCase() 
+        const user = await User.findOne({
+          email: credentials.email.trim().toLowerCase()
         });
 
-        if (user && user.password) {
+        if (user && user.password && user.is_verified) {  // 🆕 Added is_verified check
           const isValid = await bcrypt.compare(credentials.password, user.password);
           if (isValid) {
             return {
